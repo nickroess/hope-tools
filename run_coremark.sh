@@ -6,8 +6,8 @@ set -e
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SRC=$script_dir/..
 TESTDIR=$SRC/policies/policy_tests
-POLICIES="none stack rwx"
-POLICIES="none"
+#POLICIES="none stack rwx heap threeClass heap-rwx-stack-threeClass"
+POLICIES="none stack rwx heap"
 TEST=printf_works_1.c
 
 export CONFIG=hifive
@@ -16,7 +16,7 @@ export RULE_CACHE=finite
 
 # Build hope-src, kernels, coremark
 make -C $SRC -j4 all
-make -C $SRC clean-kernel kernel
+make -C $SRC/policies/policy_tests clean-kernels install-kernels-simple
 make -B -C $SRC/freedom-e-sdk software PROGRAM=coremark
 
 for POLICY in ${POLICIES}; do
