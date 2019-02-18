@@ -40,7 +40,7 @@ qemu: policy-engine
 riscv-newlib: llvm-riscv
 
 path_check:
-	(grep -q $(ISP_PREFIX)bin <<< $(PATH)) || (echo "Need to add $(ISP_PREFIX)/bin to your PATH" && false)
+	(grep -q $(ISP_PREFIX)/bin <<< $(PATH)) || (echo "Need to add $(ISP_PREFIX)/bin to your PATH" && false)
 
 $(PROJECTS): $(ISP_PREFIX)
 	$(MAKE) -f Makefile.isp -C ../$@

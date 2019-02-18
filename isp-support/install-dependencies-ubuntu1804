@@ -21,5 +21,24 @@ sudo apt-get install -y autoconf automake autogen autotools-dev curl \
     python3-psutil xterm verilator python3-pip
 sudo -H pip3 install pyinstaller
 stack upgrade --binary-only
-echo 'export PATH=$HOME/.local/bin:$PATH:/opt/isp/bin' >> ~/.bashrc
-echo 'export ISP_PREFIX=/opt/isp/' >> ~/.bashrc
+
+if [ "${ISP_PREFIX}x" == "x" ]; then
+    while true; do
+	  echo "Please specify the location where you want to install the ISP tools [/opt/isp]:"
+	  read ISP_PREFIX
+	  ISP_PREFIX=${ISP_PREFIX:-/opt/isp}
+	  # validate the ISP_PREFIX
+	  if [ ! -d "${ISP_PREFIX}" ]; then
+	      echo "$ISP_PREFIX is not a valid directory... try again or create it first"
+	  else
+	      break
+	  fi
+    done
+fi
+
+# if ${ISP_PREFIX}/bin is not in the PATH, add it!
+if [ $(grep ${ISP_PREFIX}/bin) <<< ${PATH} ]; then
+    echo 'export PATH=$HOME/.local/bin:$PATH:"${ISP_PREFIX}/bin' >> ~/.bashrc
+    echo 'export ISP_PREFIX="${ISP_PREFIX}"' >> ~/.bashrc
+fi
+source ~/.bashrc
