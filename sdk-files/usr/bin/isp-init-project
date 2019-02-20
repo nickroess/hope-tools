@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ISP_PREFIX=${ISP_PREFIX:-/opt/isp}
+
 prompt_input() {
 
     while true; do
@@ -29,7 +31,7 @@ prompt_copy() {
 }
 
 
-prompt_copy "pex" "/opt/isp/pex_skeleton"
+prompt_copy "pex" "${ISP_PREFIX}/pex_skeleton"
 
 if [ -e policies ]; then
 
@@ -37,4 +39,4 @@ if [ -e policies ]; then
 
 fi
 
-cp -rn /opt/isp/policies/ policies
+cp -rn ${ISP_PREFIX}/policies/ policies
