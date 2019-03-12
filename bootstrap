@@ -5,10 +5,12 @@ set -e
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ${script_dir}/isp-support/install-dependencies-ubuntu1804
-# next 2 lines are not needed anymore as they are being set in the above
+
+# next 2 lines are not technically needed anymore as they are being set in the above
 # install-dependencies-ubuntu1804 scrip (along with the ISP_PREFIX var
 #PATH=$HOME/.local/bin:$PATH:/opt/isp/bin
-#export ISP_PREFIX=${ISP_PREFIX:-/opt/isp/}
+#export ISP_PREFIX="${ISP_PREFIX:-/opt/isp/}"
+
 cd ${script_dir}
 make -j `nproc`
 make kernel

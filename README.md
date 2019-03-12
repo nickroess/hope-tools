@@ -2,11 +2,14 @@
 
 This is a step by step guide on how to build the HOPE software toolchain.
 
-By default everything is built in `/opt/isp/`.  This is also where the package
-installs everything.  You will need to add `/opt/isp/bin/` to your `PATH` before
-you build.  After you can change the install location by creating an
-environmental variable `ISP_PREFIX` and setting that to whatever you prefer.
-Note that `ISP_PREFIX` must end with a `/`.
+1. Create an environmental variable ISP_PREFIX and make it point to the location
+where you want the HOPE tools to be installed. Also, make sure to add ${ISP_PREFIX}/bin
+to your PATH:
+
+...
+export ISP_PREFIX=/foo/bar
+export PATH=${ISP_PREFIX}/bin:${PATH}
+,,,
 
 ## Installing Necessary Software
 
