@@ -97,7 +97,7 @@ def buildPolicyKernel(policy, policies_dir, entities_dir, output_dir):
         return False
 
     shutil.move(validator_path, output_dir)
-    shutil.rmtree(engine_output_dir)
+    #shutil.rmtree(engine_output_dir)
 
     return True
 
@@ -140,15 +140,19 @@ def main():
     shutil.rmtree(output_dir, ignore_errors=True)
     isp_utils.doMkDir(output_dir)
 
+
     copyEngineSources(engine_dir, output_dir)
     copyPolicyYaml(args.policy, policies_dir, entities_dir, output_dir)
+    
     if runPolicyTool(args.policy, policies_dir, entities_dir, output_dir, args.debug) is False:
         print("Failed to run policy tool")
         sys.exit(1)
+    print("Succeeded build policy.")
 
     if buildPolicyKernel(args.policy, policies_dir, entities_dir, output_dir) is False:
         print("Failed to build policy kernel")
         sys.exit(1)
+    print("Succeeded build kernel.")
 
 
 if __name__ == "__main__":

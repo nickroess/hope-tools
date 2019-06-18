@@ -54,9 +54,14 @@ def runSim(exe_path, kernels_dir, run_dir, policy, sim, runtime, rule_cache, gdb
 
     doMkDir(run_dir)
 
+    print("doValidatorCfg()")
     doValidatorCfg(policy_dir, run_dir, exe_name, rule_cache)
+    print("doEntititesFile()")
     doEntitiesFile(run_dir, exe_name)
+    print("generateTagInfo()")    
     generateTagInfo(exe_path, run_dir, policy_dir)
+    print("Rebuild validator()")
+    rebuildValidator(kernels_dir, policy, run_dir)
 
     bininfo_base_path = os.path.join(run_dir, "bininfo", exe_name) + ".{}"
     if not os.path.isfile(bininfo_base_path.format("taginfo")) or \
@@ -73,6 +78,25 @@ def runSim(exe_path, kernels_dir, run_dir, policy, sim, runtime, rule_cache, gdb
         isp_renode.runOnRenode(exe_path, run_dir, policy_dir, runtime, gdb)
 
     return retVals.SUCCESS
+
+# After running the policy-specific parts of the toolflow (e.g., generateTagInfo),
+# we do another Make on the validator. This gives the toolflow a chance to
+# integrate application-specific tagging info into compiled kernel. Optional.
+def rebuildValidator(kernels_dir, policy, run_dir):
+    
+    # Run make in the engine directory
+    kernel_dir = os.path.join(kernels_dir, policy)
+    engine_dir = os.path.join(kernel_dir, "engine")
+          
+    subprocess.Popen(["make", "-f", "Makefile.isp"],
+                     stdout=subprocess.PIPE,
+                     stderr=subprocess.STDOUT,
+                     cwd=engine_dir).wait()
+
+    # Then copy the new validator .so up to the top level
+    build_dir = os.path.join(engine_dir, "build")
+    for so_file in glob.glob(build_dir + "/*.so"):
+        shutil.copy(so_file, kernel_dir)
 
 
 def getPolicyDir(policy, kernels_dir):

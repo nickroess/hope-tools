@@ -67,7 +67,7 @@ install-gdb-scripts: $(GDB_SCRIPTS) $(GDB_DIR)
 	install $(GDB_SCRIPTS) $(GDB_DIR)
 
 $(KERNELS): $(SYMLINK_DSTS) $(INSTALLED_ISP_SCRIPTS) $(KERNEL_DIR)
-	isp_kernel $(notdir $@) $(KERNEL_DIR)
+	isp_kernel $(notdir $@) -o $(KERNEL_DIR)
 
 $(SYMLINK_DSTS): $(SYMLINK_DIR)/%: $(ROOT)/%
 	@echo $(SYMLINK_DSTS)
